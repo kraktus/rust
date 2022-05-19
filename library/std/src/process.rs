@@ -1033,9 +1033,6 @@ impl Command {
 
 #[stable(feature = "rust1", since = "1.0.0")]
 impl fmt::Debug for Command {
-    /// Format the program and arguments of a Command for display. Any
-    /// non-utf8 data is lossily converted using the utf8 replacement
-    /// character.
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         self.inner.fmt(f)
     }

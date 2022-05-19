@@ -110,6 +110,7 @@ pub struct Command {
 }
 
 // Create a new type for argv, so that we can make it `Send` and `Sync`
+#[derive(Debug)]
 struct Argv(Vec<*const c_char>);
 
 // It is safe to make `Argv` `Send` and `Sync`, because it contains
@@ -144,6 +145,7 @@ pub enum ChildStdio {
     Null,
 }
 
+#[derive(Debug)]
 pub enum Stdio {
     Inherit,
     Null,
@@ -510,16 +512,30 @@ impl ChildStdio {
 }
 
 impl fmt::Debug for Command {
+    // show all attributes but `self.closures` which does not implement `Debug`
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        if self.program != self.args[0] {
-            write!(f, "[{:?}] ", self.program)?;
-        }
-        write!(f, "{:?}", self.args[0])?;
+        let mut debug_command = f.debug_struct("Command");
+        debug_command
+            .field("program", &self.program)
+            .field("args", &self.args)
+            .field("argv", &self.argv)
+            .field("env", &self.env)
+            .field("cwd", &self.cwd)
+            .field("uid", &self.uid)
+            .field("gid", &self.gid)
+            .field("saw_nul", &self.saw_nul)
+            .field("groups", &self.groups)
+            .field("stdin", &self.stdin)
+            .field("stdout", &self.stdout)
+            .field("stderr", &self.stderr)
+            .field("pgroup", &self.pgroup);
 
-        for arg in &self.args[1..] {
-            write!(f, " {:?}", arg)?;
+        #[cfg(target_os = "linux")]
+        {
+            debug_command.field("create_pidfd", &self.create_pidfd);
         }
-        Ok(())
+
+        debug_command.finish()
     }
 }
 
