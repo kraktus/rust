@@ -21,13 +21,13 @@ use std::sync::Arc;
 impl fmt::Debug for ty::TraitDef {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         ty::tls::with(|tcx| {
-            with_no_trimmed_paths!({
+            with_no_trimmed_paths!(
                 f.write_str(
                     &FmtPrinter::new(tcx, Namespace::TypeNS)
                         .print_def_path(self.def_id, &[])?
                         .into_buffer(),
                 )
-            })
+            )
         })
     }
 }
@@ -35,13 +35,13 @@ impl fmt::Debug for ty::TraitDef {
 impl<'tcx> fmt::Debug for ty::AdtDef<'tcx> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         ty::tls::with(|tcx| {
-            with_no_trimmed_paths!({
+            with_no_trimmed_paths!(
                 f.write_str(
                     &FmtPrinter::new(tcx, Namespace::TypeNS)
                         .print_def_path(self.did(), &[])?
                         .into_buffer(),
                 )
-            })
+            )
         })
     }
 }
@@ -76,6 +76,7 @@ impl fmt::Debug for ty::BoundRegionKind {
                     write!(f, "BrNamed({:?}, {})", did, name)
                 }
             }
+
             ty::BrEnv => write!(f, "BrEnv"),
         }
     }

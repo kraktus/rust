@@ -144,11 +144,11 @@ impl IdentClass {
             match node {
                 ast::Name(name) => NameClass::classify(sema, &name).map(IdentClass::NameClass),
                 ast::NameRef(name_ref) => NameRefClass::classify(sema, &name_ref).map(IdentClass::NameRefClass),
-                ast::Lifetime(lifetime) => {
+                ast::Lifetime(lifetime) => 
                     NameClass::classify_lifetime(sema, &lifetime)
                         .map(IdentClass::NameClass)
                         .or_else(|| NameRefClass::classify_lifetime(sema, &lifetime).map(IdentClass::NameRefClass))
-                },
+                ,
                 ast::AwaitExpr(await_expr) => OperatorClass::classify_await(sema, &await_expr).map(IdentClass::Operator),
                 ast::BinExpr(bin_expr) => OperatorClass::classify_bin(sema, &bin_expr).map(IdentClass::Operator),
                 ast::IndexExpr(index_expr) => OperatorClass::classify_index(sema, &index_expr).map(IdentClass::Operator),
@@ -462,21 +462,21 @@ impl NameRefClass {
 
         match_ast! {
             match parent {
-                ast::MethodCallExpr(method_call) => {
+                ast::MethodCallExpr(method_call) => 
                     sema.resolve_method_call(&method_call)
                         .map(Definition::Function)
                         .map(NameRefClass::Definition)
-                },
-                ast::FieldExpr(field_expr) => {
+                ,
+                ast::FieldExpr(field_expr) =>
                     sema.resolve_field(&field_expr)
                         .map(Definition::Field)
                         .map(NameRefClass::Definition)
-                },
-                ast::RecordPatField(record_pat_field) => {
+                ,
+                ast::RecordPatField(record_pat_field) =>
                     sema.resolve_record_pat_field(&record_pat_field)
                         .map(Definition::Field)
                         .map(NameRefClass::Definition)
-                },
+                ,
                 ast::AssocTypeArg(_) => {
                     // `Trait<Assoc = Ty>`
                     //        ^^^^^

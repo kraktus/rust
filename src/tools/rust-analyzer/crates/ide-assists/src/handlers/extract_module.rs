@@ -245,7 +245,7 @@ impl Module {
         for item in &self.body_items {
             match_ast! {
                 match (item.syntax()) {
-                    ast::Adt(it) => {
+                    ast::Adt(it) =>
                         if let Some( nod ) = ctx.sema.to_def(&it) {
                             let node_def = Definition::Adt(nod);
                             self.expand_and_group_usages_file_wise(ctx, node_def, &mut refs);
@@ -277,37 +277,31 @@ impl Module {
                                 },
                                 ast::Adt::Enum(_) => {},
                             }
-                        }
-                    },
-                    ast::TypeAlias(it) => {
+                        },
+                    ast::TypeAlias(it) =>
                         if let Some( nod ) = ctx.sema.to_def(&it) {
                             let node_def = Definition::TypeAlias(nod);
                             self.expand_and_group_usages_file_wise(ctx, node_def, &mut refs);
-                        }
-                    },
-                    ast::Const(it) => {
+                        },
+                    ast::Const(it) => 
                         if let Some( nod ) = ctx.sema.to_def(&it) {
                             let node_def = Definition::Const(nod);
                             self.expand_and_group_usages_file_wise(ctx, node_def, &mut refs);
-                        }
-                    },
-                    ast::Static(it) => {
+                        },
+                    ast::Static(it) =>
                         if let Some( nod ) = ctx.sema.to_def(&it) {
                             let node_def = Definition::Static(nod);
                             self.expand_and_group_usages_file_wise(ctx, node_def, &mut refs);
-                        }
-                    },
-                    ast::Fn(it) => {
+                        },
+                    ast::Fn(it) => 
                         if let Some( nod ) = ctx.sema.to_def(&it) {
                             let node_def = Definition::Function(nod);
                             self.expand_and_group_usages_file_wise(ctx, node_def, &mut refs);
-                        }
-                    },
-                    ast::Macro(it) => {
+                        },
+                    ast::Macro(it) =>
                         if let Some(nod) = ctx.sema.to_def(&it) {
                             self.expand_and_group_usages_file_wise(ctx, Definition::Macro(nod), &mut refs);
-                        }
-                    },
+                        },
                     _ => (),
                 }
             }

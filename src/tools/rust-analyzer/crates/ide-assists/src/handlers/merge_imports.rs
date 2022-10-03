@@ -53,12 +53,12 @@ pub(crate) fn merge_imports(acc: &mut Assists, ctx: &AssistContext<'_>) -> Optio
         let first_selected = selected_nodes.next()?;
         let edits = match_ast! {
             match first_selected {
-                ast::Use(use_item) => {
+                ast::Use(use_item) =>
                     use_item.try_merge_from(&mut selected_nodes.filter_map(ast::Use::cast))
-                },
-                ast::UseTree(use_tree) => {
+                ,
+                ast::UseTree(use_tree) =>
                     use_tree.try_merge_from(&mut selected_nodes.filter_map(ast::UseTree::cast))
-                },
+                ,
                 _ => return None,
             }
         };

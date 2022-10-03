@@ -72,7 +72,7 @@ pub(crate) fn fixup_syntax(node: &SyntaxNode) -> SyntaxFixups {
         let end_range = TextRange::empty(node.text_range().end());
         match_ast! {
             match node {
-                ast::FieldExpr(it) => {
+                ast::FieldExpr(it) =>
                     if it.name_ref().is_none() {
                         // incomplete field access: some_expr.|
                         append.insert(node.clone().into(), vec![
@@ -83,9 +83,19 @@ pub(crate) fn fixup_syntax(node: &SyntaxNode) -> SyntaxFixups {
                                 id: EMPTY_ID,
                             },
                         ]);
+                    },
+                ast::ExprStmt(it) => if it.semicolon_token().is_none() {
+                        append.insert(node.clone().into(), vec![
+                            SyntheticToken {
+                                kind: SyntaxKind::SEMICOLON,
+                                text: ";".into(),
+                                range: end_range,
+                                id: EMPTY_ID,
+                            },
+                        ]);
                     }
-                },
-                ast::ExprStmt(it) => {
+                ,
+                ast::LetStmt(it) => 
                     if it.semicolon_token().is_none() {
                         append.insert(node.clone().into(), vec![
                             SyntheticToken {
@@ -96,19 +106,7 @@ pub(crate) fn fixup_syntax(node: &SyntaxNode) -> SyntaxFixups {
                             },
                         ]);
                     }
-                },
-                ast::LetStmt(it) => {
-                    if it.semicolon_token().is_none() {
-                        append.insert(node.clone().into(), vec![
-                            SyntheticToken {
-                                kind: SyntaxKind::SEMICOLON,
-                                text: ";".into(),
-                                range: end_range,
-                                id: EMPTY_ID,
-                            },
-                        ]);
-                    }
-                },
+                ,
                 ast::IfExpr(it) => {
                     if it.condition().is_none() {
                         // insert placeholder token after the if token
@@ -175,7 +173,7 @@ pub(crate) fn fixup_syntax(node: &SyntaxNode) -> SyntaxFixups {
                         ]);
                     }
                 },
-                ast::LoopExpr(it) => {
+                ast::LoopExpr(it) => 
                     if it.loop_body().is_none() {
                         append.insert(node.clone().into(), vec![
                             SyntheticToken {
@@ -192,7 +190,7 @@ pub(crate) fn fixup_syntax(node: &SyntaxNode) -> SyntaxFixups {
                             },
                         ]);
                     }
-                },
+                ,
                 // FIXME: foo::
                 ast::MatchExpr(it) => {
                     if it.expr().is_none() {
