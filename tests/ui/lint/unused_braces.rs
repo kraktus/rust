@@ -37,7 +37,7 @@ fn main() {
     consume({ 7 });
     //~^ WARN unnecessary braces
 
-    // Do not emit lint for multiline blocks.
+    // Do not emit lint for semicolon blocks.
     let _ = {
         7
     };
@@ -50,4 +50,19 @@ fn main() {
     if { return } {
 
     }
+
+    match Some(1) {
+        // Do not lint, removing the block without inserting a comma would be a compilation error
+        Some(_) => {()}
+        None => {
+            println!("Very very long expression that should not be linted for style");
+        }
+    }
+
+    match Some(2) {
+        Some(_) => 1,
+        None => {
+            2
+        }
+    };
 }
