@@ -104,27 +104,23 @@ fn peel_blocks(mut expr: ast::Expr) -> ast::Expr {
     loop {
         match_ast! {
             match (expr.syntax()) {
-                ast::BlockExpr(it) => {
+                ast::BlockExpr(it) => 
                     if let Some(tail) = it.tail_expr() {
                         expr = tail.clone();
                     } else {
                         break;
-                    }
-                },
-                ast::IfExpr(it) => {
-                    if let Some(then_branch) = it.then_branch() {
+                    },
+                ast::IfExpr(it) => if let Some(then_branch) = it.then_branch() {
                         expr = ast::Expr::BlockExpr(then_branch.clone());
                     } else {
                         break;
-                    }
-                },
-                ast::MatchExpr(it) => {
+                    },
+                ast::MatchExpr(it) =>
                     if let Some(arm_expr) = it.match_arm_list().and_then(|l| l.arms().next()).and_then(|a| a.expr()) {
                         expr = arm_expr;
                     } else {
                         break;
-                    }
-                },
+                    },
                 _ => break,
             }
         }

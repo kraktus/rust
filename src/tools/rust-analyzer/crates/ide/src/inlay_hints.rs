@@ -295,9 +295,8 @@ fn closing_brace_hints(
                     };
                     (hint_text, None)
                 },
-                ast::Trait(tr) => {
-                    (format!("trait {}", tr.name()?), tr.name().map(name))
-                },
+                ast::Trait(tr) => 
+                    (format!("trait {}", tr.name()?), tr.name().map(name)),
                 _ => return None,
             }
         }
@@ -312,19 +311,17 @@ fn closing_brace_hints(
         let parent = block.syntax().parent()?;
         match_ast! {
             match parent {
-                ast::Fn(it) => {
+                ast::Fn(it) =>
                     // FIXME: this could include parameters, but `HirDisplay` prints too much info
                     // and doesn't respect the max length either, so the hints end up way too long
-                    (format!("fn {}", it.name()?), it.name().map(name))
-                },
+                    (format!("fn {}", it.name()?), it.name().map(name)),
                 ast::Static(it) => (format!("static {}", it.name()?), it.name().map(name)),
-                ast::Const(it) => {
+                ast::Const(it) => 
                     if it.underscore_token().is_some() {
                         ("const _".into(), None)
                     } else {
                         (format!("const {}", it.name()?), it.name().map(name))
-                    }
-                },
+                    },
                 _ => return None,
             }
         }
@@ -1090,15 +1087,14 @@ fn should_not_display_type_hint(
                 ast::LetExpr(_) => return pat_is_enum_variant(db, bind_pat, pat_ty),
                 ast::IfExpr(_) => return false,
                 ast::WhileExpr(_) => return false,
-                ast::ForExpr(it) => {
+                ast::ForExpr(it) => 
                     // We *should* display hint only if user provided "in {expr}" and we know the type of expr (and it's not unit).
                     // Type of expr should be iterable.
                     return it.in_token().is_none() ||
                         it.iterable()
                             .and_then(|iterable_expr| sema.type_of_expr(&iterable_expr))
                             .map(TypeInfo::original)
-                            .map_or(true, |iterable_ty| iterable_ty.is_unknown() || iterable_ty.is_unit())
-                },
+                            .map_or(true, |iterable_ty| iterable_ty.is_unknown() || iterable_ty.is_unit()),
                 _ => (),
             }
         }

@@ -123,14 +123,13 @@ impl ItemTree {
                     top_attrs = Some(RawAttrs::new(db, &file, ctx.hygiene()));
                     ctx.lower_module_items(&file)
                 },
-                ast::MacroItems(items) => {
-                    ctx.lower_module_items(&items)
-                },
-                ast::MacroStmts(stmts) => {
+                ast::MacroItems(items) =>
+                    ctx.lower_module_items(&items),
+                ast::MacroStmts(stmts) =>
                     // The produced statements can include items, which should be added as top-level
                     // items.
                     ctx.lower_macro_stmts(stmts)
-                },
+                ,
                 _ => {
                     panic!("cannot create item tree from {:?} {}", syntax, syntax);
                 },

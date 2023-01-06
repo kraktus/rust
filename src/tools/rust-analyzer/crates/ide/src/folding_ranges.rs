@@ -88,7 +88,7 @@ pub(crate) fn folding_ranges(file: &SourceFile) -> Vec<Fold> {
             NodeOrToken::Node(node) => {
                 match_ast! {
                     match node {
-                        ast::Module(module) => {
+                        ast::Module(module) =>
                             if module.item_list().is_none() {
                                 if let Some(range) = contiguous_range_for_item_group(
                                     module,
@@ -96,33 +96,27 @@ pub(crate) fn folding_ranges(file: &SourceFile) -> Vec<Fold> {
                                 ) {
                                     res.push(Fold { range, kind: FoldKind::Mods })
                                 }
-                            }
-                        },
-                        ast::Use(use_) => {
+                            },
+                        ast::Use(use_) =>
                             if let Some(range) = contiguous_range_for_item_group(use_, &mut visited_imports) {
                                 res.push(Fold { range, kind: FoldKind::Imports })
-                            }
-                        },
-                        ast::Const(konst) => {
+                            },
+                        ast::Const(konst) =>
                             if let Some(range) = contiguous_range_for_item_group(konst, &mut visited_consts) {
                                 res.push(Fold { range, kind: FoldKind::Consts })
-                            }
-                        },
-                        ast::Static(statik) => {
+                            },
+                        ast::Static(statik) =>
                             if let Some(range) = contiguous_range_for_item_group(statik, &mut visited_statics) {
                                 res.push(Fold { range, kind: FoldKind::Statics })
-                            }
-                        },
-                        ast::WhereClause(where_clause) => {
+                            },
+                        ast::WhereClause(where_clause) =>
                             if let Some(range) = fold_range_for_where_clause(where_clause) {
                                 res.push(Fold { range, kind: FoldKind::WhereClause })
-                            }
-                        },
-                        ast::MatchArm(match_arm) => {
+                            },
+                        ast::MatchArm(match_arm) =>
                             if let Some(range) = fold_range_for_multiline_match_arm(match_arm) {
                                 res.push(Fold {range, kind: FoldKind::MatchArm})
-                            }
-                        },
+                            },
                         _ => (),
                     }
                 }

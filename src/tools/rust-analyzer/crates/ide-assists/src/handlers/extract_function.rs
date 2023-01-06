@@ -781,18 +781,14 @@ impl FunctionBody {
                         }
                         (fn_.const_token().is_some(), fn_.body().map(ast::Expr::BlockExpr), Some(ret_ty))
                     },
-                    ast::Static(statik) => {
-                        (true, statik.body(), Some(sema.to_def(&statik)?.ty(sema.db)))
-                    },
-                    ast::ConstArg(ca) => {
-                        (true, ca.expr(), infer_expr_opt(ca.expr()))
-                    },
-                    ast::Const(konst) => {
-                        (true, konst.body(), Some(sema.to_def(&konst)?.ty(sema.db)))
-                    },
-                    ast::ConstParam(cp) => {
-                        (true, cp.default_val(), Some(sema.to_def(&cp)?.ty(sema.db)))
-                    },
+                    ast::Static(statik) =>
+                        (true, statik.body(), Some(sema.to_def(&statik)?.ty(sema.db))),
+                    ast::ConstArg(ca) =>
+                        (true, ca.expr(), infer_expr_opt(ca.expr())),
+                    ast::Const(konst) =>
+                        (true, konst.body(), Some(sema.to_def(&konst)?.ty(sema.db))),
+                    ast::ConstParam(cp) =>
+                        (true, cp.default_val(), Some(sema.to_def(&cp)?.ty(sema.db))),
                     ast::ConstBlockPat(cbp) => {
                         let expr = cbp.block_expr().map(ast::Expr::BlockExpr);
                         (true, expr.clone(), infer_expr_opt(expr))

@@ -10,12 +10,8 @@ pub fn path_to_string_stripping_turbo_fish(path: &ast::Path) -> String {
         .filter_map(|node| {
             match_ast! {
                 match node {
-                    ast::PathSegment(it) => {
-                        Some(it.name_ref()?.to_string())
-                    },
-                    ast::Path(it) => {
-                        Some(path_to_string_stripping_turbo_fish(&it))
-                    },
+                    ast::PathSegment(it) => Some(it.name_ref()?.to_string()),
+                    ast::Path(it) => Some(path_to_string_stripping_turbo_fish(&it)),
                     _ => None,
                 }
             }
