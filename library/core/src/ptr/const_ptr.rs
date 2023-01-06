@@ -1361,10 +1361,8 @@ impl<T: ?Sized> *const T {
             panic!("align_offset: align is not a power-of-two");
         }
 
-        {
-            // SAFETY: `align` has been checked to be a power of 2 above
-            unsafe { align_offset(self, align) }
-        }
+        // SAFETY: `align` has been checked to be a power of 2 above
+        unsafe { align_offset(self, align) }
     }
 
     /// Returns whether the pointer is properly aligned for `T`.

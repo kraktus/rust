@@ -1194,12 +1194,10 @@ impl<'tcx> LateContext<'tcx> {
                 }
 
                 // This shouldn't ever be needed, but just in case:
-                with_no_trimmed_paths!({
-                    Ok(vec![match trait_ref {
-                        Some(trait_ref) => Symbol::intern(&format!("{:?}", trait_ref)),
-                        None => Symbol::intern(&format!("<{}>", self_ty)),
-                    }])
-                })
+                with_no_trimmed_paths!(Ok(vec![match trait_ref {
+                    Some(trait_ref) => Symbol::intern(&format!("{:?}", trait_ref)),
+                    None => Symbol::intern(&format!("<{}>", self_ty)),
+                }]))
             }
 
             fn path_append_impl(

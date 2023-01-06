@@ -49,15 +49,14 @@ pub(crate) fn goto_type_definition(
                         ast::Type(it) => sema.resolve_type(&it)?,
                         ast::RecordField(it) => sema.to_def(&it).map(|d| d.ty(db.upcast()))?,
                         // can't match on RecordExprField directly as `ast::Expr` will match an iteration too early otherwise
-                        ast::NameRef(it) => {
+                        ast::NameRef(it) => 
                             if let Some(record_field) = ast::RecordExprField::for_name_ref(&it) {
                                 let (_, _, ty) = sema.resolve_record_field(&record_field)?;
                                 ty
                             } else {
                                 let record_field = ast::RecordPatField::for_field_name_ref(&it)?;
                                 sema.resolve_record_pat_field(&record_field)?.ty(db)
-                            }
-                        },
+                            },
                         _ => return None,
                     }
                 };
